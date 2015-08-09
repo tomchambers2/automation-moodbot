@@ -39,7 +39,7 @@ function checkMood() {
 	})
 }
 
-var client = mqtt.connect("mqtt://localhost")
+var client = mqtt.connect("mqtt://192.168.1.74")
 
 client.on('message', function(topic, payload) {
 	presentInRoom = true
