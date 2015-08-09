@@ -15,13 +15,14 @@ function moodToColor(level) {
 }
 
 function updateColor(level) {
-	var color = moodToColor(latestMood.val().level)
-	console.log('Mood at',latestMood.val().level,'Will set color to',color)
+	var color = moodToColor(level)
+	console.log('Mood at',level,'Will set color to',color)
 	client.publish('lights/color',color)
 }
 
 function changeMusic(level) {
 	playlistTheme = playlistMap[level]
+	console.log('Set music to %s',playlistTheme)
 }
 
 function checkMood() {
@@ -45,7 +46,7 @@ client.on('message', function(topic, payload) {
 	var beforeBedtime = moment().isBefore(moment().endOf('day').subtract(2,'hours'))
 	var afterWaking = moment().isAfter(moment().startOf('day').add(10,'hours'))
 	if (afterWaking && beforeBedtime) {
-		client.publish('music/play', playlistTheme)
+		client.publish('music/playlist', playlistTheme)
 	}
 })
 
@@ -57,3 +58,11 @@ client.on('connect', function(err) {
 
 	checkMood()
 })
+
+client.on('close', function() {
+	console.log("fail!!! close")
+})		
+
+client.on('offline', function() {
+	console.log("fail!!! offline")
+})	
